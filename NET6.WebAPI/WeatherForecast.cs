@@ -1,4 +1,4 @@
-namespace NET6_WebAPI
+namespace NET6.WebAPI
 {
     public class WeatherForecast
     {
