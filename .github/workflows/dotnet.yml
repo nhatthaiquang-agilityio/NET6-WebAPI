@@ -61,7 +61,8 @@ jobs:
       working-directory: C:/inetpub/wwwroot/webapi
 
     - name: Deploy WebAPI
-        uses: RasmusBuchholdt/simply-web-deploy@2.0.0
-        with:
-          website-name: '${{ env.website-name }}'
-          source-path:  '${{ env.website-path }}'
+      uses: im-open/iis-site-create@v2.0.2
+      with:
+        website-name: '${{ env.website-name }}'
+        app-pool-name: '${{ env.app-pool-name }}'
+        website-path: '${{ env.website-path }}'
