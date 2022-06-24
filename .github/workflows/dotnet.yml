@@ -27,3 +27,43 @@ jobs:
     
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    
+    - name: Publish
+      run: dotnet publish NET6.WebAPI/NET6.WebAPI.csproj -c Release -o webapi
+    
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: webapi
+        path: webapi/**
+        if-no-files-found: error
+
+  deploy_test:
+    needs: build
+    runs-on: self-hosted
+    env:
+      website-name: 'Default Website'
+      app-pool-name: 'webapi'
+      website-path: 'c:\inetpub\wwwroot\webapi'
+
+    environment:
+      name: TEST
+
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.8
+      with:
+        name: webapi
+        path: C:/inetpub/wwwroot/webapi
+
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: C:/inetpub/wwwroot/webapi
+
+    - name: Create WebAPI
+        uses: im-open/iis-site-create@v2.0.2
+        with:
+          server: '${{ env.server }}'
+          website-name: '${{ env.website-name }}'
+          app-pool-name: '${{ env.app-pool-name }}'
+          website-path: '${{ env.website-path }}'
