@@ -47,7 +47,7 @@ jobs:
       website-path: 'c:\inetpub\wwwroot\webapi'
 
     environment:
-      name: TEST
+      name: Test
 
     steps:
     - name: Download a Build Artifact
@@ -60,10 +60,8 @@ jobs:
       run: ls -R
       working-directory: C:/inetpub/wwwroot/webapi
 
-    - name: Create WebAPI
-        uses: im-open/iis-site-create@v2.0.2
+    - name: Deploy WebAPI
+        uses: RasmusBuchholdt/simply-web-deploy@2.0.0
         with:
-          server: '${{ env.server }}'
           website-name: '${{ env.website-name }}'
-          app-pool-name: '${{ env.app-pool-name }}'
-          website-path: '${{ env.website-path }}'
+          source-path:  '${{ env.website-path }}'
