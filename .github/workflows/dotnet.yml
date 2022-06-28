@@ -44,7 +44,7 @@ jobs:
     env:
       website-name: 'Default Website'
       app-pool-name: 'webapi'
-      website-path: 'c:\inetpub\wwwroot\webapi'
+      website-path: 'D:\deployments\webapi'
 
     environment:
       name: Test
@@ -52,17 +52,17 @@ jobs:
     steps:
     - name: Create directory
       run: |
-        mkdir  C:/inetpub/wwwroot/webapi
+        mkdir  D:\deployments\webapi
 
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.8
       with:
         name: webapi
-        path: C:/inetpub/wwwroot/webapi
+        path: D:\deployments\webapi
 
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: C:/inetpub/wwwroot/webapi
+      working-directory: D:\deployments\webapi
 
     - name: Deploy WebAPI
       uses: im-open/iis-site-create@v2.0.2
