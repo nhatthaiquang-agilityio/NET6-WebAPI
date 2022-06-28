@@ -10,27 +10,27 @@ jobs:
   build:
 
     runs-on: self-hosted
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    
+
     - name: Restore dependencies
       run: dotnet restore
-    
+
     - name: Build
       run: dotnet build --no-restore
-    
+
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    
+
     - name: Publish
       run: dotnet publish NET6.WebAPI/NET6.WebAPI.csproj -c Release -o webapi
-    
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.2
       with:
@@ -50,6 +50,10 @@ jobs:
       name: Test
 
     steps:
+    - name: Create directory
+      run: |
+        mkdir  C:/inetpub/wwwroot/webapi
+
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.8
       with:
