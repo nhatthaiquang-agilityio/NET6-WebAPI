@@ -67,6 +67,9 @@ jobs:
     - name: Deploy WebAPI
       uses: im-open/iis-site-create@v2.0.2
       with:
+        server: 'localhost'
         website-name: '${{ env.website-name }}'
         app-pool-name: '${{ env.app-pool-name }}'
         website-path: '${{ env.website-path }}'
+        service-account-id: '${{ secrets.USER }}'
+        service-account-password: '${{ secrets.PASSWORD }}'
