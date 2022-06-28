@@ -51,8 +51,8 @@ jobs:
 
     steps:
     - name: Create directory
-        run: |
-          mkdir  C:/inetpub/wwwroot/webapi
+      run: |
+        mkdir  C:/inetpub/wwwroot/webapi
 
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.8
