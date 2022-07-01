@@ -43,8 +43,9 @@ jobs:
     runs-on: self-hosted
     env:
       website-name: 'Default Website'
-      app-pool-name: 'webapi'
-      website-path: 'D:\deployments\webapi'
+      app-name: 'webapi'
+      app-pool-name: 'pool-webapi'
+      physical-path: 'D:\deployments\webapi'
 
     environment:
       name: Test
@@ -65,11 +66,10 @@ jobs:
       working-directory: D:\deployments\webapi
 
     - name: Deploy WebAPI
-      uses: im-open/iis-site-create@v2.0.2
+      uses: nhatthai/deploy-iis@0.0.1-alpha
       with:
-        server: 'localhost'
-        website-name: '${{ env.website-name }}'
-        app-pool-name: '${{ env.app-pool-name }}'
-        website-path: '${{ env.website-path }}'
-        service-account-id: '${{ secrets.USER }}'
-        service-account-password: '${{ secrets.PASSWORD }}'
+        website_name: '${{ env.website-name }}'
+        app_name: '${{ env.app-name }}'
+        app+pool_name: '${{ env.app-pool-name }}'
+        physical_path: '${{ env.physical-path }}'
+
