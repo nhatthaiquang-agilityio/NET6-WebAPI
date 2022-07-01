@@ -53,7 +53,7 @@ jobs:
     steps:
     - name: Create directory
       run: |
-        mkdir  D:\deployments\webapi
+        mkdir  -p D:\deployments\webapi
 
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.8
@@ -66,7 +66,7 @@ jobs:
       working-directory: D:\deployments\webapi
 
     - name: Deploy WebAPI
-      uses: nhatthai/deploy-iis@0.0.1-alpha1
+      uses: nhatthai/deploy-iis@0.0.1-alpha3
       with:
         website_name: '${{ env.website-name }}'
         app_name: '${{ env.app-name }}'
