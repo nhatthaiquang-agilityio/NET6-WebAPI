@@ -70,6 +70,6 @@ jobs:
       with:
         website_name: '${{ env.website-name }}'
         app_name: '${{ env.app-name }}'
-        app+pool_name: '${{ env.app-pool-name }}'
+        app_pool_name: '${{ env.app-pool-name }}'
         physical_path: '${{ env.physical-path }}'
 
