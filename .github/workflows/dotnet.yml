@@ -65,12 +65,12 @@ jobs:
 
     - name: Stop Application Pool
       shell: cmd
-      run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi"','recycleMode="StopAppPool"' '
+      run: "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi"','recycleMode="StopAppPool"'
 
     - name: Deploy Application
       shell: cmd
-      run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:'iisApp="C:\deployments\webapi"' -dest:'iisApp="Default Web Site/webapi"''
+      run: "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:'iisApp="C:\deployments\webapi"' -dest:'iisApp="Default Web Site/webapi"'
 
     - name: Start Application Pool
       shell: cmd
-      run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi"','recycleMode="StartAppPool"''
+      run: "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi"','recycleMode="StartAppPool"'
