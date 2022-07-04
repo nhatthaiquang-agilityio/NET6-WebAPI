@@ -44,7 +44,7 @@ jobs:
     env:
       app-name: 'webapi'
       app-pool-name: 'pool-webapi'
-      physical-path: 'C:\deployments\webapi'
+      physical-path: 'D:\deployments\webapi'
 
     environment:
       name: Test
