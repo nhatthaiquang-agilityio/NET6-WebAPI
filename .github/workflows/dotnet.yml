@@ -44,7 +44,7 @@ jobs:
     env:
       app-name: 'webapi'
       app-pool-name: 'pool-webapi'
-      physical-path: 'D:\deployments\webapi'
+      physical-path: 'C:\deployments\webapi'
 
     environment:
       name: Test
@@ -56,9 +56,7 @@ jobs:
         name: webapi
         path: '${{ env.physical-path }}'
 
-    - name: Deploy WebAPI
-      uses: nhatthai/deploy-iis@0.0.1-alpha7
-      with:
-        app_name: '${{ env.app-name }}'
-        app_pool_name: '${{ env.app-pool-name }}'
-        physical_path: '${{ env.physical-path }}'
+    - name: Check permission of Action Runner
+      uses: powershell
+      run: |
+        Get-IISAppPool -Name $app_pool_name
