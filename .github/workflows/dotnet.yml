@@ -56,11 +56,6 @@ jobs:
         name: webapi
         path: '${{ env.physical-path }}'
 
-    # - name: Check permission of Action Runner
-    #   shell: powershell
-    #   run: Get-IISAppPool -Name $app_pool_name
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-
-    - name: Run MSDeploy.exe
-      run: msdeploy -verb:sync -source:package=D:\deployments\webapi -dest:auto -setParam:name=`'IIS Web Application Name`',value=`'Default Web Site`' -enableRule:DoNotDeleteRule
+    - name: Check permission of Action Runner
+      shell: powershell
+      run: Get-IISAppPool -Name $app_pool_name
