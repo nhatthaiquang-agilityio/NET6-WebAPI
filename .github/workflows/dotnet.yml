@@ -42,7 +42,6 @@ jobs:
     needs: build
     runs-on: self-hosted
     env:
-      website-name: ' '
       app-name: 'webapi'
       app-pool-name: 'pool-webapi'
       physical-path: 'D:\deployments\webapi'
@@ -51,19 +50,11 @@ jobs:
       name: Test
 
     steps:
-    - name: Create directory
-      run: |
-        mkdir  -p D:\deployments\webapi
-
     - name: Download a Build Artifact
       uses: actions/download-artifact@v2.0.8
       with:
         name: webapi
-        path: D:\deployments\webapi
-
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: D:\deployments\webapi
+        path: '${{ env.physical-path }}'
 
     - name: Deploy WebAPI
       uses: nhatthai/deploy-iis@0.0.1-alpha7
@@ -71,4 +62,3 @@ jobs:
         app_name: '${{ env.app-name }}'
         app_pool_name: '${{ env.app-pool-name }}'
         physical_path: '${{ env.physical-path }}'
-
