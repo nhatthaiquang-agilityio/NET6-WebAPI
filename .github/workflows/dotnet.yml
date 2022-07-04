@@ -45,9 +45,8 @@ jobs:
       app-name: 'webapi'
       app-pool-name: 'pool-webapi'
       physical-path: 'C:\deployments\webapi'
-
       PROJECT_DIRECTORY_PATH: "NET6.WebAPI"
-      IIS_SERVER_COMPUTER_NAME: ${{ secrets.IIS_SERVER_COMPUTER_NAME }}
+      IIS_SERVER_COMPUTER_NAME: FINCOAD
       IIS_WEBSITE_NAME: localhost
       IIS_SERVER_USERNAME: ""
       IIS_SERVER_PASSWORD: ""
