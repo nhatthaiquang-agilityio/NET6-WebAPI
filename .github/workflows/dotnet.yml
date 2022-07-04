@@ -57,6 +57,5 @@ jobs:
         path: '${{ env.physical-path }}'
 
     - name: Check permission of Action Runner
-      uses: powershell
-      run: |
-        Get-IISAppPool -Name $app_pool_name
+      shell: powershell
+      run: Get-IISAppPool -Name $app_pool_name
