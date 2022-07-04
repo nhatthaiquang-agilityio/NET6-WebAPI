@@ -44,7 +44,15 @@ jobs:
     env:
       app-name: 'webapi'
       app-pool-name: 'pool-webapi'
-      physical-path: 'D:\deployments\webapi'
+      physical-path: 'C:\deployments\webapi'
+
+      PROJECT_DIRECTORY_PATH: "NET6.WebAPI"
+      IIS_SERVER_COMPUTER_NAME: ${{ secrets.IIS_SERVER_COMPUTER_NAME }}
+      IIS_WEBSITE_NAME: localhost
+      IIS_SERVER_USERNAME: ""
+      IIS_SERVER_PASSWORD: ""
+      RECYCLE_APP_NAME: "webapi"
+      WEBSITE_CONTENT_PATH: "D:\deployments\webapi"
 
     environment:
       name: Test
@@ -56,6 +64,14 @@ jobs:
         name: webapi
         path: '${{ env.physical-path }}'
 
-    - name: Check permission of Action Runner
-      shell: powershell
-      run: Get-IISAppPool -Name $app_pool_name
+    - name: Stop Application Pool
+      shell: cmd
+      run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ env.RECYCLE_APP_NAME }}",recycleMode="StopAppPool",computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"'
+
+    - name: Deploy Application
+      shell: cmd
+      run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -dest:contentPath="${{ env.WEBSITE_CONTENT_PATH }}",computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",authtype="Basic"'
+
+    - name: Start Application Pool
+      shell: cmd
+      run: '"C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ env.RECYCLE_APP_NAME }}",recycleMode="StartAppPool",computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"'
