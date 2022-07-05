@@ -65,7 +65,7 @@ jobs:
 
     - name: Create Application Pool
       shell: cmd
-      run: 'C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:webapi-pool /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated'
+      run: C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:webapi-pool /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
 
     - name: Deploy Application
       shell: cmd
@@ -77,4 +77,4 @@ jobs:
 
     - name: Start Application Pool
       shell: cmd
-      run: ' "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi",recycleMode="StartAppPool"' '
+      run: "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi",recycleMode="StartAppPool"'
