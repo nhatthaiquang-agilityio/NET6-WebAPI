@@ -43,15 +43,9 @@ jobs:
     runs-on: self-hosted
     env:
       app-name: 'webapi'
-      app-pool-name: 'pool-webapi'
-      physical-path: 'C:\deployments\webapi'
-      PROJECT_DIRECTORY_PATH: 'NET6.WebAPI'
-      IIS_SERVER_COMPUTER_NAME: 'FINCOAD'
+      app-pool-name: 'webapi-pool'
+      physical-path: 'D:\deployments\webapi'
       IIS_WEBSITE_NAME: 'Default Web Site'
-      IIS_SERVER_USERNAME: ''
-      IIS_SERVER_PASSWORD: ''
-      RECYCLE_APP_NAME: 'webapi'
-      WEBSITE_CONTENT_PATH: 'D:\deployments\webapi'
 
     environment:
       name: Test
@@ -66,19 +60,19 @@ jobs:
     - name: Create Application Pool
       shell: cmd
       run: |
-        C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:webapi-pool /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+        C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
 
     - name: Deploy Application
       shell: cmd
       run: |
-        "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:'iisApp="C:\deployments\webapi"' -dest:'iisApp="Default Web Site/webapi"'
+        "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:'iisApp="${{ env.physical-path }}"' -dest:'iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"'
 
     - name: Set an Application Pool for an Application
       shell: cmd
       run: |
-        'C:\Windows\System32\inetsrv\appcmd.exe\appcmd.exe set app /app.name:"Default Web Site/webapi" /applicationPool:webapi-pool'
+        'C:\Windows\System32\inetsrv\appcmd.exe\appcmd.exe set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:${{ env.app-pool-name }}'
 
     - name: Start Application Pool
       shell: cmd
       run: |
-        "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="Default Web Site/webapi",recycleMode="StartAppPool"'
+        "C:/Program Files (x86)/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"'
