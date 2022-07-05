@@ -65,14 +65,14 @@ jobs:
     - name: Deploy Application
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:'iisApp="${{ env.physical-path }}"' -dest:'iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"'
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
 
     - name: Set an Application Pool for an Application
       shell: cmd
       run: |
-        'C:\Windows\System32\inetsrv\appcmd.exe\appcmd.exe set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:${{ env.app-pool-name }}'
+        C:\Windows\System32\inetsrv\appcmd.exe\appcmd.exe set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:${{ env.app-pool-name }}
 
     - name: Start Application Pool
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:'recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"'
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
