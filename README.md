@@ -6,6 +6,11 @@
 + Add self-hosted runner on local machine
 + Install Web Deployment Tool(using v3)
 
+#### Required Deployment with Powershell
++ webadministration module should be imported using powershell
++ Make sure that the GitHub Action Runner agent uses Log on method as “local system account” for the agent service
+
+
 ### Github Actions:
 + Job: Build
 + Job: Deploy_Test
@@ -35,7 +40,19 @@
 + Create an web application with service account
 + Create an web application and set SSL(HTTPS)
 
+### Issues:
+#### Fixed: permission with self-hosted runner
+
++ Github Runner service name
+`powershell "(Get-Service actions.runner.*).name"`
+==> actions.runner.nhatthai-NET6-WebAPI.FINCOAD
+
++ Run commands
+`pwsh`
+`sc config "actions.runner.nhatthai-NET6-WebAPI.FINCOAD" obj="NT AUTHORITY\SYSTEM" type=own`
+
 ### References
 + [Getting started with AppCmd](https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe)
 + [AppCmd introduction and examples](https://www.saotn.org/appcmd-introduction-examples/)
 + [Web Deployment Tool Syntax](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/dd569106(v=ws.10))
++ [Using the LocalSystem Account as a Service](https://docs.microsoft.com/en-us/windows/win32/ad/the-localsystem-account)
