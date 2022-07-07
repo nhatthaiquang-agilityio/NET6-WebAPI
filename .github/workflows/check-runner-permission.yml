@@ -1,4 +1,4 @@
-name: .NET
+name: Check permission Powershell
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       app-pool-name: 'webapi-pool'
 
     steps:
-    - name: Create Application Pool
+    - name: Check Application Pool
       shell: powershell
       run: |
         Get-IISAppPool -Name ${{ env.app-pool-name }}
