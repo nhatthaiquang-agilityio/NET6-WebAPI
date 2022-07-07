@@ -23,9 +23,9 @@
     ```
 
 ### Check the ISS and API
-+ [IIS on WebApp](./Images/iis-app-pool.png)
-+ [Application Pool](./Images/iis-app-pool.png)
-+ [WeatherForecast API](./Images/weatherforecast-api.png)
++ ![IIS on WebApp](./Images/iis-app-pool.png)
++ ![Application Pool](./Images/iis-app-pool.png)
++ ![WeatherForecast API](./Images/weatherforecast-api.png)
 
 ### Drawback/Issue
 + It throws the error if an application pool exists
