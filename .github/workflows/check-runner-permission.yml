@@ -1,0 +1,19 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      app-pool-name: 'webapi-pool'
+
+    steps:
+    - name: Create Application Pool
+    shell: powershell
+    run: |
+      Get-IISAppPool -Name ${{ env.app-pool-name }}
