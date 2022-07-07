@@ -97,7 +97,7 @@ jobs:
         path: '${{ env.physical_path }}'
 
     - name: Deploy WebAPI with PowerShell
-      uses: nhatthai/deploy-iis@0.0.1-alpha7
+      uses: nhatthai/deploy-iis@0.0.2
       with:
         app_name: '${{ env.app_name }}'
         app_pool_name: '${{ env.app_pool_name }}'
