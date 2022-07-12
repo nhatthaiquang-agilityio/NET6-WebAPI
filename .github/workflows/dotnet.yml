@@ -103,6 +103,3 @@ jobs:
         app_name: '${{ env.app_name }}'
         app_pool_name: '${{ env.app_pool_name }}'
         physical_path: '${{ env.physical_path }}'
-        user_service: '${{ env.user_service }}'
-        password_service: '${{ env.password_service }}'
-        website_name: '${{ env.IIS_WEBSITE_NAME }}'
