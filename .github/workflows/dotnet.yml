@@ -85,7 +85,7 @@ jobs:
       app_pool_name: 'webapi-powershell-pool'
       physical_path: 'D:\deployments\webapipowershell'
       IIS_WEBSITE_NAME: 'Default Web Site'
-      user_service: 'net6-webapp'
+      user_service: 'net6webapp'
       password_service: 'password@123'
     environment:
       name: Test
