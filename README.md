@@ -1,19 +1,19 @@
 # NET6-WebAPI
-    + Create a WebAPI example with .NET6 using Github Actions
-    + GitHub Actions: use `appcmd` and `msdeploy` for deployment the WebAPI on the IIS locally
++ Create a WebAPI example with .NET6 using Github Actions
++ GitHub Actions: use `appcmd` and `msdeploy` for deployment the WebAPI on the IIS locally
 
 ### Required
-+ Add self-hosted runner on local machine
-+ Install Web Deployment Tool(using v3)
+    + Add self-hosted runner on local machine
+    + Install Web Deployment Tool(using v3)
 
-#### Required Deployment with Powershell
-+ webadministration module should be imported using powershell
-+ Make sure that the GitHub Action Runner agent uses Log on method as “local system account” for the agent service
+#### Deployment Required with Powershell
+    + webadministration module should be imported using powershell
+    + Make sure that the GitHub Action Runner agent uses Log on method as “local system account” for the agent service
 
 
 ### Github Actions:
-+ Job: Build
-+ Job: Deploy_Test
+    + Job: Build
+    + Job: Deploy_Test
 
 ### Command Lines
 + Create an Application Pool
@@ -28,16 +28,15 @@
     ```
 
 ### Check the ISS and API
-+ ![IIS on WebApp](./Images/iis-app-pool.png)
-+ ![Application Pool](./Images/iis-app-pool.png)
-+ ![WeatherForecast API](./Images/weatherforecast-api.png)
+![IIS on WebApp](./Images/iis-app-pool.png)
+![Application Pool](./Images/iis-app-pool.png)
+![WeatherForecast API](./Images/weatherforecast-api.png)
 
 ### Drawback/Issue
 + It throws the error if an application pool exists
 
 ### TODO:
 + Create a script for checking an existing application pool, if it doesn't exist then create, else nothing
-+ Create an web application with service account
 + Create an web application and set SSL(HTTPS)
 
 ### Issues:
