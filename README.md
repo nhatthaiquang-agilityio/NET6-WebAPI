@@ -1,7 +1,9 @@
 # NET6-WebAPI
 + Create a WebAPI example with .NET6 using Github Actions
-+ GitHub Actions: use `appcmd` and `msdeploy` for deployment the WebAPI on the IIS locally
-
++ GitHub Actions: 
+    - Use `appcmd` and `msdeploy` for deployment the WebAPI on the IIS locally
+    - Use Powershell for deployment the Web Application on the IIS
+    
 ### Required
     + Add self-hosted runner on local machine
     + Install Web Deployment Tool(using v3)
