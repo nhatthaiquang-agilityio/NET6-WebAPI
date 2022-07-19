@@ -59,19 +59,25 @@ jobs:
         name: webapi
         path: '${{ env.physical-path }}'
 
-    - name: Create Application Pool
+    - name: Create variable command
       shell: cmd
       run: |
-        try {
-          SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
-          %appcmd% add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
-        }
-        catch [System.Exception] { }
+        SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
+        SET msdeploycmd=CALL C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe
+
+    # - name: Create Application Pool
+    #   shell: cmd
+    #   run: |
+    #     try {
+    #       SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
+    #       %appcmd% add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+    #     }
+    #     catch [System.Exception] { }
 
     - name: Deploy Application
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
+        "%msdeploycmd%" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
 
     - name: Set an Application Pool for an Application
       shell: cmd
@@ -81,7 +87,7 @@ jobs:
     - name: Start Application Pool
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
+        "%msdeploycmd%" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
 
   # deploy_test_powershell:
   #   needs: build
