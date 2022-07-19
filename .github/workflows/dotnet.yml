@@ -59,15 +59,10 @@ jobs:
         name: webapi
         path: '${{ env.physical-path }}'
 
-    - name: Create variable command
-      shell: cmd
-      run: |
-        SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
-
     - name: Create Application Pool
       shell: cmd
       run: |
-        %appcmd% add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+        C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
 
     - name: Deploy Application
       shell: cmd
@@ -77,7 +72,7 @@ jobs:
     - name: Set an Application Pool for an Application
       shell: cmd
       run: |
-        %appcmd% set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" -processModel.identityType:"SpecificUser" -processModel.userName:"${{ env.user-service }}" -processModel.password:"${{ env.password-service }}"
+        C:\Windows\System32\inetsrv\appcmd.exe set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" -processModel.identityType:"SpecificUser" -processModel.userName:"${{ env.user-service }}" -processModel.password:"${{ env.password-service }}"
 
     - name: Start Application Pool
       shell: cmd
