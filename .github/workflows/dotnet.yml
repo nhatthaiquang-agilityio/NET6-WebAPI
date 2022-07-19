@@ -78,7 +78,7 @@ jobs:
     - name: Set an Application Pool for an Application
       shell: cmd
       run: |
-        %appcmd% set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" "-processModel.identityType:SpecificUser" "-processModel.userName:'${{ env.user-service }}" "-processModel.password:'${{ env.password-service }}'"
+        %appcmd% set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" -processModel.identityType:"SpecificUser" -processModel.userName:"${{ env.user-service }}" -processModel.password:"'${{ env.password-service }}"
 
     - name: Start Application Pool
       shell: cmd
