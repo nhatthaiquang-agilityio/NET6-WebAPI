@@ -46,8 +46,8 @@ jobs:
       app-pool-name: 'webapi-pool'
       physical-path: 'C:\deployments\webapi'
       IIS_WEBSITE_NAME: 'Default Web Site'
-      user-service: 'net6webapp'
-      password-service: 'password@123'
+      user-service: ''
+      password-service: ''
 
     environment:
       name: Test
@@ -79,29 +79,29 @@ jobs:
       run: |
         "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
 
-  # deploy_test_powershell:
-  #   needs: build
-  #   runs-on: self-hosted
-  #   env:
-  #     app_name: 'webapipowershell'
-  #     app_pool_name: 'webapi-powershell-pool'
-  #     physical_path: 'D:\deployments\webapipowershell'
-  #     IIS_WEBSITE_NAME: 'Default Web Site'
-  #     user_service: 'net6webapp'
-  #     password_service: 'password@123'
-  #   environment:
-  #     name: Test
+  deploy_test_powershell:
+    needs: build
+    runs-on: self-hosted
+    env:
+      app_name: 'webapipowershell'
+      app_pool_name: 'webapi-powershell-pool'
+      physical_path: 'D:\deployments\webapipowershell'
+      IIS_WEBSITE_NAME: 'Default Web Site'
+      user_service: 'net6webapp'
+      password_service: 'password@123'
+    environment:
+      name: Test
 
-  #   steps:
-  #   - name: Download a Build Artifact
-  #     uses: actions/download-artifact@v2.0.8
-  #     with:
-  #       name: webapi
-  #       path: '${{ env.physical_path }}'
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.8
+      with:
+        name: webapi
+        path: '${{ env.physical_path }}'
 
-  #   - name: Deploy WebAPI with PowerShell
-  #     uses: nhatthai/deploy-webapp-iis@0.0.3
-  #     with:
-  #       app_name: '${{ env.app_name }}'
-  #       app_pool_name: '${{ env.app_pool_name }}'
-  #       physical_path: '${{ env.physical_path }}'
+    - name: Deploy WebAPI with PowerShell
+      uses: nhatthai/deploy-webapp-iis@0.0.3
+      with:
+        app_name: '${{ env.app_name }}'
+        app_pool_name: '${{ env.app_pool_name }}'
+        physical_path: '${{ env.physical_path }}'
