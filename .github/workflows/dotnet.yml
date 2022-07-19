@@ -63,7 +63,7 @@ jobs:
       shell: cmd
       run: |
         SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
-
+        SET msdeploycmd=CALL C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe
     - name: Create Application Pool
       shell: cmd
       run: |
@@ -73,17 +73,17 @@ jobs:
     - name: Deploy Application
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
+        %msdeploycmd% -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
 
     - name: Set an Application Pool for an Application
       shell: cmd
       run: |
-        %appcmd% set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" -processModel.identityType:"SpecificUser" -processModel.userName:"${{ env.user-service }}" -processModel.password:"'${{ env.password-service }}"
+        %appcmd% set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" -processModel.identityType:"SpecificUser" -processModel.userName:"${{ env.user-service }}" -processModel.password:"${{ env.password-service }}"
 
     - name: Start Application Pool
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
+         %msdeploycmd% -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
 
   # deploy_test_powershell:
   #   needs: build
