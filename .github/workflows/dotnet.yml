@@ -105,3 +105,44 @@ jobs:
         app_name: '${{ env.app_name }}'
         app_pool_name: '${{ env.app_pool_name }}'
         physical_path: '${{ env.physical_path }}'
+
+  deploy_stage:
+    needs: build
+    runs-on: Stage
+    env:
+      app-name: 'webapi'
+      app-pool-name: 'webapi-pool'
+      physical-path: 'C:\deployments\webapi'
+      IIS_WEBSITE_NAME: 'Default Web Site'
+      user-service: ''
+      password-service: ''
+
+    environment:
+      name: Stage
+
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.8
+      with:
+        name: webapi
+        path: '${{ env.physical-path }}'
+
+    - name: Create Application Pool
+      shell: cmd
+      run: |
+        C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+
+    - name: Deploy Application
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
+
+    - name: Set an Application Pool for an Application
+      shell: cmd
+      run: |
+        C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
+
+    - name: Start Application Pool
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
