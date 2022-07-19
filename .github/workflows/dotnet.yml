@@ -38,55 +38,17 @@ jobs:
         path: webapi/**
         if-no-files-found: error
 
-  # deploy_test:
-  #   needs: build
-  #   runs-on: self-hosted
-  #   env:
-  #     app-name: 'webapi'
-  #     app-pool-name: 'webapi-pool'
-  #     physical-path: 'C:\deployments\webapi'
-  #     IIS_WEBSITE_NAME: 'Default Web Site'
-
-  #   environment:
-  #     name: Test
-
-  #   steps:
-  #   - name: Download a Build Artifact
-  #     uses: actions/download-artifact@v2.0.8
-  #     with:
-  #       name: webapi
-  #       path: '${{ env.physical-path }}'
-
-  #   - name: Create Application Pool
-  #     shell: cmd
-  #     run: |
-  #       C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
-
-  #   - name: Deploy Application
-  #     shell: cmd
-  #     run: |
-  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
-
-  #   - name: Set an Application Pool for an Application
-  #     shell: cmd
-  #     run: |
-  #       C:\Windows\System32\inetsrv\appcmd.exe set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:${{ env.app-pool-name }}
-
-  #   - name: Start Application Pool
-  #     shell: cmd
-  #     run: |
-  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
-
-  deploy_test_powershell:
+  deploy_test:
     needs: build
     runs-on: self-hosted
     env:
-      app_name: 'webapipowershell'
-      app_pool_name: 'webapi-powershell-pool'
-      physical_path: 'D:\deployments\webapipowershell'
+      app-name: 'webapi'
+      app-pool-name: 'webapi-pool'
+      physical-path: 'C:\deployments\webapi'
       IIS_WEBSITE_NAME: 'Default Web Site'
-      user_service: 'net6webapp'
-      password_service: 'password@123'
+      user-service: 'net6webapp'
+      password-service: 'password@123'
+
     environment:
       name: Test
 
@@ -95,11 +57,55 @@ jobs:
       uses: actions/download-artifact@v2.0.8
       with:
         name: webapi
-        path: '${{ env.physical_path }}'
+        path: '${{ env.physical-path }}'
 
-    - name: Deploy WebAPI with PowerShell
-      uses: nhatthai/deploy-webapp-iis@0.0.3
-      with:
-        app_name: '${{ env.app_name }}'
-        app_pool_name: '${{ env.app_pool_name }}'
-        physical_path: '${{ env.physical_path }}'
+    - name: Create Application Pool
+      shell: cmd
+      run: |
+        try {
+          SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
+          %appcmd% add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+        }
+        catch [System.Exception] { }
+
+    - name: Deploy Application
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
+
+    - name: Set an Application Pool for an Application
+      shell: cmd
+      run: |
+        %appcmd% set app /app.name:"${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}" /applicationPool:"${{ env.app-pool-name }}" "-processModel.identityType:SpecificUser" "-processModel.userName:'${{ env.user-service }}" "-processModel.password:'${{ env.password-service }}'"
+
+    - name: Start Application Pool
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
+
+  # deploy_test_powershell:
+  #   needs: build
+  #   runs-on: self-hosted
+  #   env:
+  #     app_name: 'webapipowershell'
+  #     app_pool_name: 'webapi-powershell-pool'
+  #     physical_path: 'D:\deployments\webapipowershell'
+  #     IIS_WEBSITE_NAME: 'Default Web Site'
+  #     user_service: 'net6webapp'
+  #     password_service: 'password@123'
+  #   environment:
+  #     name: Test
+
+  #   steps:
+  #   - name: Download a Build Artifact
+  #     uses: actions/download-artifact@v2.0.8
+  #     with:
+  #       name: webapi
+  #       path: '${{ env.physical_path }}'
+
+  #   - name: Deploy WebAPI with PowerShell
+  #     uses: nhatthai/deploy-webapp-iis@0.0.3
+  #     with:
+  #       app_name: '${{ env.app_name }}'
+  #       app_pool_name: '${{ env.app_pool_name }}'
+  #       physical_path: '${{ env.physical_path }}'
