@@ -63,16 +63,12 @@ jobs:
       shell: cmd
       run: |
         SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
-        SET msdeploycmd=CALL
 
-    # - name: Create Application Pool
-    #   shell: cmd
-    #   run: |
-    #     try {
-    #       SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
-    #       %appcmd% add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
-    #     }
-    #     catch [System.Exception] { }
+    - name: Create Application Pool
+      shell: cmd
+      run: |
+        SET appcmd=CALL %WINDIR%\system32\inetsrv\appcmd.exe
+        %appcmd% add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
 
     - name: Deploy Application
       shell: cmd
