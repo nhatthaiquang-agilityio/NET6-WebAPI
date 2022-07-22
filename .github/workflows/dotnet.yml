@@ -145,7 +145,7 @@ jobs:
     - name: Deploy Application
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }},computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
 
     - name: Set an Application Pool for an Application
       shell: powershell
