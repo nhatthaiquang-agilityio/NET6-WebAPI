@@ -108,7 +108,7 @@ jobs:
 
   deploy_stage:
     needs: build
-    runs-on: windows-latest
+    runs-on: self-hosted
     env:
       app-name: 'webapi'
       app-pool-name: 'webapi-pool'
