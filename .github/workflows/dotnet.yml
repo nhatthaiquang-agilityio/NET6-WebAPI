@@ -38,46 +38,46 @@ jobs:
         path: webapi/**
         if-no-files-found: error
 
-  deploy_test:
-    needs: build
-    runs-on: self-hosted
-    env:
-      app-name: 'webapi'
-      app-pool-name: 'webapi-pool'
-      physical-path: 'C:\deployments\webapi'
-      IIS_WEBSITE_NAME: 'Default Web Site'
-      user-service: ''
-      password-service: ''
+  # deploy_test:
+  #   needs: build
+  #   runs-on: self-hosted
+  #   env:
+  #     app-name: 'webapi'
+  #     app-pool-name: 'webapi-pool'
+  #     physical-path: 'C:\deployments\webapi'
+  #     IIS_WEBSITE_NAME: 'Default Web Site'
+  #     user-service: ''
+  #     password-service: ''
 
-    environment:
-      name: Test
+  #   environment:
+  #     name: Test
 
-    steps:
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v2.0.8
-      with:
-        name: webapi
-        path: '${{ env.physical-path }}'
+  #   steps:
+  #   - name: Download a Build Artifact
+  #     uses: actions/download-artifact@v2.0.8
+  #     with:
+  #       name: webapi
+  #       path: '${{ env.physical-path }}'
 
-    - name: Create Application Pool
-      shell: cmd
-      run: |
-        C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+  #   - name: Create Application Pool
+  #     shell: cmd
+  #     run: |
+  #       C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
 
-    - name: Deploy Application
-      shell: cmd
-      run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
+  #   - name: Deploy Application
+  #     shell: cmd
+  #     run: |
+  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
 
-    - name: Set an Application Pool for an Application
-      shell: cmd
-      run: |
-        C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
+  #   - name: Set an Application Pool for an Application
+  #     shell: cmd
+  #     run: |
+  #       C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
 
-    - name: Start Application Pool
-      shell: cmd
-      run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
+  #   - name: Start Application Pool
+  #     shell: cmd
+  #     run: |
+  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
 
   deploy_test_powershell:
     needs: build
@@ -108,12 +108,15 @@ jobs:
 
   deploy_stage:
     needs: build
-    runs-on: self-hosted
+    runs-on: windows-latest
     env:
       app-name: 'webapi'
       app-pool-name: 'webapi-pool'
       physical-path: 'C:\deployments\webapi'
       IIS_WEBSITE_NAME: 'Default Web Site'
+      IIS_SERVER_COMPUTER_NAME: '139.180.144.223'
+      IIS_SERVER_USERNAME: 'Administrator'
+      IIS_SERVER_PASSWORD: ${{ secret.IIS_SERVER_PASSWORD }}
       user-service: ''
       password-service: ''
 
@@ -128,21 +131,34 @@ jobs:
         path: '${{ env.physical-path }}'
 
     - name: Create Application Pool
-      shell: cmd
+      shell: powershell
       run: |
-        C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+        try
+        {
+          C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+        }
+        catch
+        {
+          Write-Output "Exist Application Pool"
+        }
 
     - name: Deploy Application
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}"
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }},computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic""
 
     - name: Set an Application Pool for an Application
-      shell: cmd
+      shell: powershell
       run: |
-        C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
-
+        try
+        {
+          C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
+        }
+        catch
+        {
+          Write-Output "Unable to set property in Application Pool"
+        }
     - name: Start Application Pool
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool"
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool,computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic""
