@@ -133,17 +133,17 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Create Application Pool
-      shell: powershell
-      run: |
-        try
-        {
-          C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
-        }
-        catch
-        {
-          Write-Output "Exist Application Pool"
-        }
+    # - name: Create Application Pool
+    #   shell: powershell
+    #   run: |
+    #     try
+    #     {
+    #       C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
+    #     }
+    #     catch
+    #     {
+    #       Write-Output "Exist Application Pool"
+    #     }
 
     - name: Deploy Application
       shell: cmd
