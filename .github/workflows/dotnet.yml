@@ -144,15 +144,6 @@ jobs:
     #     {
     #       Write-Output "Exist Application Pool"
     #     }
-    - name: IIS Start
-      uses: 'im-open/app-pool-action@v2.0.0'
-      with:
-        action: 'start'
-        server: ${{ env.IIS_SERVER_COMPUTER_NAME }}
-        app-pool-name: ${{ env.app-pool-name }}
-        service-account-id: ${{ env.IIS_SERVER_USERNAME }}
-        service-account-password: ${{ secrets.IIS_SERVER_PASSWORD }}
-
     - name: Deploy Application
       shell: cmd
       run: |
