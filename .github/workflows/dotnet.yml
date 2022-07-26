@@ -114,7 +114,7 @@ jobs:
       app-pool-name: 'webapi-pool'
       physical-path: 'C:\deployments\webapi'
       IIS_WEBSITE_NAME: 'Default Web Site'
-      IIS_SERVER_COMPUTER_NAME: '139.180.144.223:8172'
+      IIS_SERVER_COMPUTER_NAME: 'http://139.180.144.223:8172'
       IIS_SERVER_USERNAME: 'Administrator'
       IIS_SERVER_PASSWORD: ${{ secrets.IIS_SERVER_PASSWORD }}
       user-service: ''
