@@ -1,0 +1,4 @@
+<parameters>
+    <setParameter name="IIS Web Application Name" value="Default Web Site/webapi" />
+    <setParameter name="Application Pool" value="TestAppPool" />
+</parameters>
