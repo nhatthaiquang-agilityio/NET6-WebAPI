@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -108,7 +108,7 @@ jobs:
 
   deploy_stage:
     needs: build
-    runs-on: self-hosted
+    runs-on: windows-latest
     env:
       app-name: 'webapi'
       app-pool-name: 'webapi-pool'
@@ -150,17 +150,17 @@ jobs:
       run: |
         "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted:true -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",computerName="${{ env.IIS_SERVER_COMPUTER_NAME }}/msdeploy.axd?site=${{ env.IIS_WEBSITE_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
 
-    - name: Set an Application Pool for an Application
-      shell: powershell
-      run: |
-        try
-        {
-          C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
-        }
-        catch
-        {
-          Write-Output "Unable to set property in Application Pool"
-        }
+    # - name: Set an Application Pool for an Application
+    #   shell: powershell
+    #   run: |
+    #     try
+    #     {
+    #       C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
+    #     }
+    #     catch
+    #     {
+    #       Write-Output "Unable to set property in Application Pool"
+    #     }
     - name: Start Application Pool
       shell: cmd
       run: |
