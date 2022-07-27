@@ -1,12 +1,14 @@
 # NET6-WebAPI
 + Create a WebAPI example with .NET6 using Github Actions
-+ GitHub Actions: 
++ GitHub Actions:
     - Use `appcmd` and `msdeploy` for deployment the WebAPI on the IIS locally
     - Use Powershell for deployment the Web Application on the IIS
-    
+
 ### Required
-    + Add self-hosted runner on local machine
-    + Install Web Deployment Tool(using v3)
+    + Add self-hosted runner on local machine or windows-latest
+
+#### Deployment Required with MSDeploy
+    + Install Web Deployment Tool(using v3) on the server(Using Web Management Service/Web Deploy Handler)
 
 #### Deployment Required with Powershell
     + webadministration module should be imported using powershell
@@ -16,6 +18,7 @@
 ### Github Actions:
     + Job: Build
     + Job: Deploy_Test
+    + Job: Deploy_Stage
 
 ### Command Lines
 + Create an Application Pool
@@ -33,9 +36,11 @@
 ![IIS on WebApp](./Images/iis-app-pool.png)
 ![Application Pool](./Images/iis-app-pool.png)
 ![WeatherForecast API](./Images/weatherforecast-api.png)
+![WeatherForecast API with MSDeploy on Stage](./Images/stage.png)
 
 ### Drawback/Issue
 + It throws the error if an application pool exists
++ Couldn't create an application pool with MSDeploy
 
 ### TODO:
 + Create a script for checking an existing application pool, if it doesn't exist then create, else nothing
