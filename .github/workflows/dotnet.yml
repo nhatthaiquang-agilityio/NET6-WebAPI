@@ -134,7 +134,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Deploy Web APP
-      uses: RahulParmarRP/dotnet-build-test-msdeploy0.1
+      uses: RahulParmarRP/dotnet-build-test-msdeploy@0.1
       with:
         PROJECT_DIRECTORY_PATH: '${{ env.physical-path }}'
         IIS_SERVER_COMPUTER_NAME: '${{ env.IIS_SERVER_COMPUTER_NAME }}'
