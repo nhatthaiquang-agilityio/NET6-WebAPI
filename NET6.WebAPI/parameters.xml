@@ -1,0 +1,4 @@
+<parameter name="Application Pool" description="Enter the name of the application pool." defaultvalue="TestAppPool" tags="AppPoolConfig">
+    <parameterentry kind="ProviderPath" scope="appPoolConfig" match="TestAppPool"/>
+    <parameterentry kind="DeploymentObjectAttribute" scope="appHostConfig" match="application/@applicationPool"/>
+</parameter>
