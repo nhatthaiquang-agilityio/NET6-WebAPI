@@ -133,39 +133,10 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
-    # - name: Create Application Pool
-    #   shell: powershell
-    #   run: |
-    #     try
-    #     {
-    #       C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated
-    #     }
-    #     catch
-    #     {
-    #       Write-Output "Exist Application Pool"
-    #     }
-
     - name: Deploy Application
       shell: cmd
       run: |
         "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted:true -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic" -setParamFile="${{ env.physical-path }}\SetParameters.xml"
-
-    # - name: Set an Application Pool for an Application
-    #   shell: powershell
-    #   run: |
-    #     try
-    #     {
-    #       C:\Windows\System32\inetsrv\appcmd.exe set apppool "${{ env.app-pool-name }}" /processModel.identityType:"SpecificUser" /processModel.userName:"${{ env.user-service }}" /processModel.password:"${{ env.password-service }}"
-    #     }
-    #     catch
-    #     {
-    #       Write-Output "Unable to set property in Application Pool"
-    #     }
-    - name: Deploy Application pool
-      shell: cmd
-      run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted:true -source:appPoolConfig -dest:appPoolConfig,wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic" -setParamFile="${{ env.physical-path }}\SetParameters.xml"
-
 
     - name: Start Application Pool
       shell: cmd
