@@ -136,7 +136,7 @@ jobs:
     - name: Create Application Pool
       shell: cmd
       run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:runCommand="C:\Windows\System32\inetsrv\appcmd.exe add apppool /name:${{ env.app-pool-name }} /managedRuntimeVersion:v4.0 /managedPipelineMode:Integrated" -dest:auto,wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+         "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:manifest=${{ env.physical-path }}\manifest.xml -dest:auto -dest:auto,wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
 
     - name: Stop Application Pool
       shell: cmd
