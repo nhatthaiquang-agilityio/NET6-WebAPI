@@ -19,7 +19,7 @@
     <None Update="parameters.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="manifest.xml">
+    <None Update="mymanifest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
