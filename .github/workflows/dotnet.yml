@@ -133,6 +133,11 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
+    - name: Stop Application Pool
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted:true -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StopAppPool",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+
     - name: Deploy Application
       shell: cmd
       run: |
