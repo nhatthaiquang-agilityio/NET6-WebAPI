@@ -106,6 +106,53 @@ jobs:
   #       app_pool_name: '${{ env.app_pool_name }}'
   #       physical_path: '${{ env.physical_path }}'
 
+  # deploy_stage:
+  #   needs: build
+  #   runs-on: self-hosted
+  #   env:
+  #     app-name: 'webapi'
+  #     app-pool-name: 'webapi-pool'
+  #     physical-path: 'C:\deployments\webapi'
+  #     IIS_WEBSITE_NAME: 'Default Web Site'
+  #     IIS_SERVER_COMPUTER_NAME: '139.180.144.223'
+  #     IIS_SERVER_USERNAME: 'Administrator'
+  #     IIS_SERVER_PASSWORD: ${{ secrets.IIS_SERVER_PASSWORD }}
+  #     user-service: ''
+  #     password-service: ''
+
+  #   environment:
+  #     name: Stage
+
+  #   steps:
+  #   - name: Download a Build Artifact
+  #     uses: actions/download-artifact@v2.0.8
+  #     with:
+  #       name: webapi
+  #       path: '${{ env.physical-path }}'
+
+  #   - name: Add msbuild to PATH
+  #     uses: microsoft/setup-msbuild@v1.0.2
+
+  #   - name: Create Application Pool
+  #     shell: cmd
+  #     run: |
+  #        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:manifest=${{ env.physical-path }}\mymanifest.xml -dest:auto,wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+
+  #   - name: Stop Application Pool
+  #     shell: cmd
+  #     run: |
+  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StopAppPool",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+
+  #   - name: Deploy Application
+  #     shell: cmd
+  #     run: |
+  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic" -setParamFile="${{ env.physical-path }}\SetParameters.xml"
+
+  #   - name: Start Application Pool
+  #     shell: cmd
+  #     run: |
+  #       "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+
   deploy_stage:
     needs: build
     runs-on: self-hosted
@@ -117,8 +164,8 @@ jobs:
       IIS_SERVER_COMPUTER_NAME: '139.180.144.223'
       IIS_SERVER_USERNAME: 'Administrator'
       IIS_SERVER_PASSWORD: ${{ secrets.IIS_SERVER_PASSWORD }}
-      user-service: ''
-      password-service: ''
+      user-service: 'stage1\testing'
+      password-service: 'stage1@testing'
 
     environment:
       name: Stage
@@ -130,30 +177,15 @@ jobs:
         name: webapi
         path: '${{ env.physical-path }}'
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Create Application Pool
-      shell: cmd
-      run: |
-         "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:manifest=${{ env.physical-path }}\mymanifest.xml -dest:auto,wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
-
-    - name: Stop Application Pool
-      shell: cmd
-      run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StopAppPool",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
-
-    - name: Deploy Application
-      shell: cmd
-      run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:iisApp="${{ env.physical-path }}" -dest:iisApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic" -setParamFile="${{ env.physical-path }}\SetParameters.xml"
-
-    # - name: Set an Application Pool for an Application
-    #   shell: cmd
-    #   run: |
-    #     "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:runCommand="C:\Windows\System32\inetsrv\appcmd.exe set apppool '${{ env.app-pool-name }}' /processModel.identityType:'SpecificUser' /processModel.userName:'${{ env.user-service }}' /processModel.password:'${{ env.password-service }}' -dest:auto,wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
-
-    - name: Start Application Pool
-      shell: cmd
-      run: |
-        "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -allowUntrusted -source:recycleApp -dest:recycleApp="${{ env.IIS_WEBSITE_NAME }}/${{ env.app-name }}",recycleMode="StartAppPool",wmsvc="${{ env.IIS_SERVER_COMPUTER_NAME }}",username="${{ env.IIS_SERVER_USERNAME }}",password="${{ env.IIS_SERVER_PASSWORD }}",AuthType="Basic"
+    - name: Deploy WebAPI with PowerShell
+      uses: nhatthai/deploy-iis@main
+      with:
+        server: '${{ env.IIS_SERVER_COMPUTER_NAME }}'
+        app_name: '${{ env.app_name }}'
+        app_pool_name: '${{ env.app_pool_name }}'
+        physical_path: '${{ env.physical_path }}'
+        user_service: '${{ env.user_service }}'
+        password_service: '${{ env.password_service }}'
+        website_name: '${{ env.IIS_WEBSITE_NAME }}'
+        deploy_user_id: '${{ env.IIS_SERVER_USERNAME }}'
+        deploy_user_secret: '${{ env.IIS_SERVER_PASSWORD }}'
