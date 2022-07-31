@@ -57,6 +57,36 @@
 `pwsh`
 `sc config "actions.runner.nhatthai-NET6-WebAPI.FINCOAD" obj="NT AUTHORITY\SYSTEM" type=own`
 
+#### Access is Denied(using Remote Powershell)
+```
+Starting Deploy WebApp
+[139.180.144.223] Connecting to remote server 139.180.144.223 failed with the following error message : Access is
+denied. For more information, see the about_Remote_Troubleshooting Help topic.
+At C:\actions-runner\_work\_actions\nhatthai\deploy-iis\main\scripts\iss_action.ps1:91 char:1
++ Invoke-Command -ComputerName $server `
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (139.180.144.223:String) [], PSRemotingTransportException
+    + FullyQualifiedErrorId : AccessDenied,PSSessionStateBroken
+Error: Process completed with exit code 1.
+```
+
+```
+[139.180.144.223] Connecting to remote server 139.180.144.223 failed with the following error message : WinRM cannot
+complete the operation. Verify that the specified computer name is valid, that the computer is accessible over the
+network, and that a firewall exception for the WinRM service is enabled and allows access from this computer. By
+default, the WinRM firewall exception for public profiles limits access to remote computers within the same local
+subnet. For more information, see the about_Remote_Troubleshooting Help topic.
+At C:\actions-runner\_work\_actions\nhatthai\deploy-iis\main\scripts\iss_action.ps1:91 char:1
++ Invoke-Command -ComputerName $server -Credential $credential -UseSSL  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (139.180.144.223:String) [], PSRemotingTransportException
+    + FullyQualifiedErrorId : WinRMOperationTimeout,PSSessionStateBroken
+```
+
+Make sure the server is listening on Port 5986
+netstat -aon
+TCP    0.0.0.0:5986           0.0.0.0:0              LISTENING       4
+
 ### References
 + [Getting started with AppCmd](https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe)
 + [AppCmd introduction and examples](https://www.saotn.org/appcmd-introduction-examples/)
