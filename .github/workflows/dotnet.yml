@@ -165,7 +165,7 @@ jobs:
       IIS_SERVER_USERNAME: 'Administrator'
       IIS_SERVER_PASSWORD: '${{ secrets.IIS_SERVER_PASSWORD }}'
       app_pool_user_service: 'stage1\testing'
-      app_pool_password_service: 'stage1@testing'
+      app_pool_password_service: 'stage1testing'
 
     environment:
       name: Stage
