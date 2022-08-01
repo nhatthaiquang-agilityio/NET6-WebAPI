@@ -190,4 +190,4 @@ jobs:
         website_name: '${{ env.IIS_WEBSITE_NAME }}'
         app_pool_user_service: '${{ env.app_pool_user_service }}'
         app_pool_password_service: '${{ env.app_pool_password_service }}'
-        source_physical_path: '${{steps.download.outputs.download-path}}'
+        source_physical_path: '${{steps.download.outputs.download-path}}\webapi'
