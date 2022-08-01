@@ -164,7 +164,7 @@ jobs:
       IIS_SERVER_COMPUTER_NAME: '139.180.144.223'
       IIS_SERVER_USERNAME: 'Administrator'
       IIS_SERVER_PASSWORD: '${{ secrets.IIS_SERVER_PASSWORD }}'
-      app_pool_user_service: 'stage1\testing'
+      app_pool_user_service: 'stage1testing'
       app_pool_password_service: 'stage1testing'
 
     environment:
@@ -187,5 +187,5 @@ jobs:
         deploy_user_id: '${{ env.IIS_SERVER_USERNAME }}'
         deploy_user_secret: '${{ env.IIS_SERVER_PASSWORD }}'
         website_name: '${{ env.IIS_WEBSITE_NAME }}'
-        app_pool_user_service: ''
-        app_pool_password_service: ''
+        app_pool_user_service: '${{ env.app_pool_user_service }}'
+        app_pool_password_service: '${{ env.app_pool_password_service }}'
