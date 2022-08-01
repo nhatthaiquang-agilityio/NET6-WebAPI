@@ -172,10 +172,11 @@ jobs:
 
     steps:
     - name: Download a Build Artifact
+      id: download
       uses: actions/download-artifact@v3
       with:
         name: webapi
-        path: '${{ env.physical-path }}'
+        # path: '${{ env.physical-path }}'
 
     - name: Deploy WebAPI with PowerShell
       uses: nhatthai/deploy-iis@main
