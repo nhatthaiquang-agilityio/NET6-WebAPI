@@ -166,7 +166,7 @@ jobs:
       IIS_SERVER_PASSWORD: '${{ secrets.IIS_SERVER_PASSWORD }}'
       app_pool_user_service: 'stage1\testing'
       app_pool_password_service: 'stage1testing'
-      source_physical_path: 'C:\deployments\webapi'
+      source_physical_path: 'C:\deployments\'
     environment:
       name: Stage
 
@@ -181,10 +181,11 @@ jobs:
     - name: Copy files to the Remote Computer
       shell: powershell
       run: |
+        $so = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
         [System.Security.SecureString]$SecurePassword = ConvertTo-SecureString "${{ env.IIS_SERVER_PASSWORD }}" -AsPlainText -Force
         $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "${{ env.IIS_SERVER_USERNAME }}", $SecurePassword
-        $Session = New-PSSession -ComputerName "${{ env.IIS_SERVER_COMPUTER_NAME }}" -Credential $credential -UseSSL
-        Copy-Item "${{steps.download.outputs.download-path}}\webapi\" -Destination "${{ env.physical_path }}\" -ToSession $Session
+        $Session = New-PSSession -ComputerName "${{ env.IIS_SERVER_COMPUTER_NAME }}" -Credential $credential -UseSSL -SessionOption $so
+        Copy-Item "${{steps.download.outputs.download-path}}" -Destination "${{ env.source_physical_path }}" -ToSession $Session -Recurse
 
     - name: Deploy WebAPI with PowerShell
       uses: nhatthai/deploy-iis@main
