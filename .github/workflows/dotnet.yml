@@ -181,7 +181,8 @@ jobs:
     - name: Copy files to the Remote Computer
       shell: powershell
       run: |
-        $credential = New-Object System.Management.Automation.PSCredential("${{ env.IIS_SERVER_USERNAME }}"", "${{ env.IIS_SERVER_PASSWORD }}")
+        [System.Security.SecureString]$SecurePassword = ConvertTo-SecureString "${{ env.IIS_SERVER_PASSWORD }}" -AsPlainText -Force
+        $credential = New-Object System.Management.Automation.PSCredential("${{ env.IIS_SERVER_USERNAME }}", "$SecurePassword")
         $Session = New-PSSession -ComputerName "{{ env.IIS_SERVER_COMPUTER_NAME }}" -Credential $credential
         Copy-Item "${{steps.download.outputs.download-path}}\webapi\" -Destination "${{ env.physical_path }}\" -ToSession $Session
 
