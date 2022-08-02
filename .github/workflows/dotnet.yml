@@ -179,7 +179,7 @@ jobs:
         # path: '${{ env.physical-path }}'
 
     - name: Copy files to the Remote Computer
-      uses: powershell
+      shell: powershell
       run: |
         [System.Security.SecureString]$SecurePassword = ConvertTo-SecureString ${{ env.IIS_SERVER_PASSWORD }} -AsPlainText -Force
         $credential = New-Object System.Management.Automation.PSCredential(${{ env.IIS_SERVER_USERNAME }}, $SecurePassword)
