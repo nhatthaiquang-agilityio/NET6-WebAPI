@@ -163,7 +163,7 @@ jobs:
       IIS_SERVER_COMPUTER_NAME: '139.180.144.223'
       IIS_SERVER_USERNAME: 'Administrator'
       IIS_SERVER_PASSWORD: '${{ secrets.IIS_SERVER_PASSWORD }}'
-      app_pool_user_service: 'stage1testing'
+      app_pool_user_service: 'stage1\testing'
       app_pool_password_service: 'stage1testing'
       source_physical_path: 'C:\deployments\'
     environment:
