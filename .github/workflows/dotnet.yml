@@ -72,7 +72,7 @@ jobs:
         Copy-Item "${{steps.download.outputs.download-path}}\" -Destination "${{ env.source_physical_path }}" -ToSession $userSession -Recurse -Force
 
     - name: Deploy WebAPI with PowerShell
-      uses: nhatthai/iis-webapp@v0.1
+      uses: nhatthai/iis-webapp@main
       with:
         server: '${{ env.IIS_SERVER_COMPUTER_NAME }}'
         app_name: '${{ env.app_name }}'

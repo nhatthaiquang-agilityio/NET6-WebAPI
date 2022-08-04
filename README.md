@@ -33,7 +33,6 @@
     ```
 
 ### Check the ISS and API
-![IIS on WebApp](./Images/iis-webapi.png)
 ![Application Pool](./Images/app-pool-stage.png)
 ![WeatherForecast API](./Images/weatherforecast-api.png)
 ![WeatherForecast API with MSDeploy on Stage](./Images/stage.png)
